@@ -1,12 +1,12 @@
 import numpy as np
 import nibabel as nb
-import nilearn
 import scipy
 
 def main():
+    print('start')
     # load nifti file
-    thal = nb.load('/Users/kangik/Downloads/B_thal_on_filtered_func_data.nii.gz')
-    wb = nb.load('/Users/kangik/Downloads/filtered_func_data.nii.gz')
+    thal = nb.load('/home/kangik/Downloads/B_thal_on_filtered_func_data_ds.nii.gz')
+    wb = nb.load('/home/kangik/Downloads/filtered_func_data_ds.nii.gz')
 
     # read matrix from the nifti file
     thald = thal.get_data()
@@ -21,6 +21,7 @@ def main():
 
         # for thalamus ts voxels
         if thal_val != 0:
+            print(x,y,z)
             thal_ts = thald[x,y,z,:]
             for (bx, by, bz), brain_val in np.ndenumerate(wbd[:,:,:,0]): 
                 if brain_val != 0: 
@@ -31,8 +32,8 @@ def main():
                     # save the coefficient at the voxel location
                     thal_voxel_corr_map[bx,by,bz] = coeff
 
-        # append the 3d map to the list
-        thal_voxel_corr_map_list.append(thal_voxel_corr_map)
+            # append the 3d map to the list
+            thal_voxel_corr_map_list.append(thal_voxel_corr_map)
 
     # merge list of 3d maps into 4d image
     four_d_map = np.concatenate([x[..., np.newaxis] for x in thal_voxel_corr_map_list], axis=3)
