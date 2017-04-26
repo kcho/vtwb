@@ -1,12 +1,13 @@
 import numpy as np
 import nibabel as nb
 import scipy
+from scipy.stats import pearsonr
 
 def main():
     print('start')
     # load nifti file
-    thal = nb.load('/home/kangik/Downloads/B_thal_on_filtered_func_data_ds.nii.gz')
-    wb = nb.load('/home/kangik/Downloads/filtered_func_data_ds.nii.gz')
+    thal = nb.load('/Users/kangik/Downloads/B_thal_on_filtered_func_data_ds.nii.gz')
+    wb = nb.load('/Users/kangik/Downloads/filtered_func_data_ds.nii.gz')
 
     # read matrix from the nifti file
     thald = thal.get_data()
@@ -27,7 +28,7 @@ def main():
                 if brain_val != 0: 
                     brain_ts = wbd[bx,by,bz,:]
                     ## correlation 
-                    coeff, pval = scipy.stats.pearson(thal_ts, brain_ts)
+                    coeff, pval = pearsonr(thal_ts, brain_ts)
 
                     # save the coefficient at the voxel location
                     thal_voxel_corr_map[bx,by,bz] = coeff
